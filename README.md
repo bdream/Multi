@@ -1,6 +1,10 @@
 Multi
 =====
 
+Persons:
+Белов Дмитрий,
+Журавлев Захар
+
 Video processing project
 
 Using:
