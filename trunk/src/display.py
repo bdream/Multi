@@ -12,8 +12,8 @@ else:
     filename = sys.argv[1];
     capture = cv.CreateFileCapture(filename)
     
-    mainWindow = 'Main'
-    cv.NamedWindow(mainWindow, cv.CV_WINDOW_AUTOSIZE)
+    backgroundWindow = 'Main'
+    cv.NamedWindow(backgroundWindow, cv.CV_WINDOW_AUTOSIZE)
     
     frame = None
     while(True):
@@ -23,7 +23,7 @@ else:
             break
         
         # Show frame
-        cv.ShowImage(mainWindow, frame)
+        cv.ShowImage(backgroundWindow, frame)
 
         # Обязательно нужна функция задержки!
         # Иначе видео пробегается моментально и на экране ничего не отображается!
