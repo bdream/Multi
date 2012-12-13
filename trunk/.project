@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.python.pydev.pythonNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/camera.py</name>
+			<type>1</type>
+			<location>D:/Git/Workbench/Multi/trunk/src/camera.py</location>
+		</link>
+	</linkedResources>
 </projectDescription>

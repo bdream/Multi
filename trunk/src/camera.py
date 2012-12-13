@@ -1,4 +1,3 @@
-import sys
 import cv2.cv as cv
 
 def GetThresholdedImage(img):
