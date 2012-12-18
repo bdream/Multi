@@ -7,7 +7,7 @@ def GetThresholdedImage(img):
 
     imgThreshed = cv.CreateImage(cv.GetSize(img), 8, 1);
 
-    # Values 20,100,100 to 30,255,255 working perfect for yellow at around 6pm
+    # Values 20,100,100 to 30,255,255 working perfect for blue at around 6pm
     cv.InRangeS(imgHSV, cv.Scalar(112, 100, 100), cv.Scalar(124, 255, 255), imgThreshed);
 
     return imgThreshed;
@@ -43,11 +43,11 @@ while(True):
     if(imgScribble == None):
         imgScribble = cv.CreateImage(cv.GetSize(frame), 8, 3);
 
-    # Holds the yellow thresholded image (yellow = white, rest = black)
-    imgYellowThresh = GetThresholdedImage(frame);
+    # Holds the blue thresholded image (blue = white, rest = black)
+    imgBlueThresh = GetThresholdedImage(frame);
 
     # Calculate the moments to estimate the position of the ball
-    imgSeq = cv.GetMat(imgYellowThresh)
+    imgSeq = cv.GetMat(imgBlueThresh)
     moments = cv.Moments(imgSeq, 1);
 
     # The actual moment values
@@ -72,12 +72,12 @@ while(True):
 
     # We want to draw a line only if its a valid position
     if (lastX > 0 and lastY > 0 and posX > 0 and posY > 0):
-        # Draw a yellow line from the previous point to the current point
+        # Draw a blue line from the previous point to the current point
         cv.Line(imgScribble, (int(posX), int(posY)), (int(lastX), int(lastY)), cv.Scalar(0,255,255), 5);
 
     # Add the scribbling image and the frame... and we get a combination of the two
     cv.Add(frame, imgScribble, frame);
-    cv.ShowImage("thresh", imgYellowThresh);
+    cv.ShowImage("thresh", imgBlueThresh);
     cv.ShowImage("video", frame);
 
     # Wait for a keypress
