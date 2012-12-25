@@ -32,6 +32,8 @@ cv.NamedWindow(sourceWindow, cv.CV_WINDOW_AUTOSIZE)
 subWindow = 'Sub'
 cv.NamedWindow(subWindow, cv.CV_WINDOW_AUTOSIZE)
 
+# Store center point of object
+oldCenterPoint = (0,0)
 background = None
 while(True):
     # Get next frame
@@ -114,17 +116,29 @@ while(True):
         pt2 = (bound_rect[0] + bound_rect[2], bound_rect[1] + bound_rect[3])
         points.append(pt1)
         points.append(pt2)
-        cv.Rectangle(grayFrame, pt1, pt2, cv.CV_RGB(255,0,0), 1)
+        cv.Rectangle(frame, pt1, pt2, cv.CV_RGB(255,0,0), 1)
 
     if len(points):
         center_point = reduce(lambda a, b: ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2), points)
-        cv.Circle(grayFrame, center_point, 40, cv.CV_RGB(255, 255, 255), 1)
-        cv.Circle(grayFrame, center_point, 30, cv.CV_RGB(255, 100, 0), 1)
-        cv.Circle(grayFrame, center_point, 20, cv.CV_RGB(255, 255, 255), 1)
-        cv.Circle(grayFrame, center_point, 10, cv.CV_RGB(255, 100, 0), 1)
+        cv.Circle(frame, center_point, 40, cv.CV_RGB(255, 255, 255), 1)
+        cv.Circle(frame, center_point, 30, cv.CV_RGB(255, 100, 0), 1)
+        cv.Circle(frame, center_point, 20, cv.CV_RGB(255, 255, 255), 1)
+        cv.Circle(frame, center_point, 10, cv.CV_RGB(255, 100, 0), 1)
+        
+        # draw line when object crossing screen center
+        frameSize = cv.GetSize(frame)
+        topPoint = (int(frameSize[0]/2), 0)
+        bottomPoint = (int(frameSize[0]/2), frameSize[1])
+        center = int(frameSize[0]/2)
+        if(oldCenterPoint[0] < center and center < center_point[0]):
+            cv.Line(frame, topPoint, bottomPoint, cv.Scalar(0,255,255), 5)
+        elif(oldCenterPoint[0] > center and center > center_point[0]):
+            cv.Line(frame, topPoint, bottomPoint, cv.Scalar(0,255,255), 5)
+            
+        # Save value of center point
+        oldCenterPoint = center_point
 
-    
-    cv.ShowImage(sourceWindow, grayFrame)
+    cv.ShowImage(sourceWindow, frame)
     
 
     # Обязательно нужна функция задержки!
