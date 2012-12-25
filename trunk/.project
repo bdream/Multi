@@ -20,5 +20,10 @@
 			<type>1</type>
 			<location>D:/Git/Workbench/Multi/trunk/src/camera.py</location>
 		</link>
+		<link>
+			<name>src/program.py</name>
+			<type>1</type>
+			<location>D:/Git/Workbench/Multi/trunk/src/program.py</location>
+		</link>
 	</linkedResources>
 </projectDescription>

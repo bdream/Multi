@@ -73,7 +73,6 @@ while(True):
     grayBack = cv.CreateImage(cv.GetSize(frame), frame.depth, 1)
     cv.CvtColor(background, grayBack, cv.CV_RGB2GRAY)
 
-    cv.ShowImage(sourceWindow, grayFrame)
     cv.ShowImage(backgroundWindow, grayBack)
     
     print "debug"
@@ -89,18 +88,44 @@ while(True):
     cv.AbsDiffS(sub, sub, 100)
     """
     
+    #medianBlur(foreground,foreground,9);
+    cv.Smooth(sub, sub, cv.CV_GAUSSIAN, 3, 0)
+    
     # threshold(foreground,foreground,128,255,THRESH_BINARY);
     #cv.AdaptiveThreshold(sub, sub, 255, cv.CV_ADAPTIVE_THRESH_GAUSSIAN_C, cv.CV_THRESH_BINARY, 9)
     cv.Threshold(sub, sub, 15, 255, cv.CV_THRESH_BINARY)
     
-    #medianBlur(foreground,foreground,9);
-    cv.Smooth(sub, sub, cv.CV_BLUR)
     #erode(foreground,foreground,Mat());
-    cv.Erode(sub, sub, None, 3)
+    cv.Erode(sub, sub, None, 10)
     #dilate(foreground,foreground,Mat());
-    cv.Dilate(sub, sub, None, 3)
-
+    cv.Dilate(sub, sub, None, 18)
+    
     cv.ShowImage(subWindow, sub)
+
+    storage = cv.CreateMemStorage(0)
+    contour = cv.FindContours(sub, storage, cv.CV_RETR_CCOMP, cv.CV_CHAIN_APPROX_SIMPLE)
+    points = []
+
+    while contour:
+        bound_rect = cv.BoundingRect(list(contour))
+        contour = contour.h_next()
+
+        pt1 = (bound_rect[0], bound_rect[1])
+        pt2 = (bound_rect[0] + bound_rect[2], bound_rect[1] + bound_rect[3])
+        points.append(pt1)
+        points.append(pt2)
+        cv.Rectangle(grayFrame, pt1, pt2, cv.CV_RGB(255,0,0), 1)
+
+    if len(points):
+        center_point = reduce(lambda a, b: ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2), points)
+        cv.Circle(grayFrame, center_point, 40, cv.CV_RGB(255, 255, 255), 1)
+        cv.Circle(grayFrame, center_point, 30, cv.CV_RGB(255, 100, 0), 1)
+        cv.Circle(grayFrame, center_point, 20, cv.CV_RGB(255, 255, 255), 1)
+        cv.Circle(grayFrame, center_point, 10, cv.CV_RGB(255, 100, 0), 1)
+
+    
+    cv.ShowImage(sourceWindow, grayFrame)
+    
 
     # Обязательно нужна функция задержки!
     # Иначе видео пробегается моментально и на экране ничего не отображается!
